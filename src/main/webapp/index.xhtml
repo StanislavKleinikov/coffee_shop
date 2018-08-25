@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:body>
+		<ui:composition template="/template/templLayout.xhtml">		 	
+			<ui:define name="content">			
+				<div class="ui-g">
+				
+				 	<p:growl id="msgs" showDetail="true" life="5000"/>
+				 
+					<div class="ui-g-12 ui-md-6 ui-lg-6" style="text-align: center;margin: auto;">
+						<p:button outcome="order?faces-redirect=true" value="Make an order" styleClass="ui-priority-primary"></p:button>
+					</div>				
+					
+					<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<h:form>
+							<p:dataList id="list" value="#{orderController.orders}" var="order" type="ordered" rows="5" paginator="true">
+						        <p:panelGrid columns="3">						       
+							        <h4>#{order}</h4>
+							        <p:button outcome="order" value="Edit" styleClass="ui-priority-primary" icon="fa fa-fw fa-edit">
+							        	<f:param name="orderId" value="#{order.id}"/>				        	 
+							        </p:button>
+							      	
+							      	<p:button  outcome="deleteOrder" value="Delete" styleClass="ui-priority-primary" icon="fa fa-fw fa-remove">
+							        	<f:param name="orderId" value="#{order.id}"/>				        	 
+							        </p:button>					       
+							  	</p:panelGrid>
+					    	</p:dataList>
+				    	</h:form>
+			    	</div>	
+			    	    	
+		    	</div>
+			</ui:define>
+		</ui:composition>
+	</h:body>
+</html>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<h:body>
+		<ui:composition template="/template/templLayout.xhtml">
+			<ui:define name="content">
+				
+				<f:metadata>
+						<f:viewParam name="orderId" value="#{orderController.orderId}"></f:viewParam>
+						<f:viewAction action="#{orderController.fetchOrder}"></f:viewAction>
+				</f:metadata>
+				
+				<h:form id="orderform">
+									
+				    <p:growl id="msgs" showDetail="true"/>
+				 
+				    <p:panel header="Making an order">
+				    
+				   		<h:inputHidden value="#{orderController.coffeeOrder.id}"></h:inputHidden>
+				   		
+				        <h:panelGrid columns="3" cellpadding="5">
+				        				        			        
+				            <p:outputLabel for="coffee" value="Coffee: " />			            
+				            <p:selectOneMenu  id="coffee" value="#{orderController.coffeeOrder.coffee}" converter="coffeeConverter" style="width:200px" tabindex="1">
+				            	<p:ajax event="change" process="@this weight delivery " listener="#{orderController.priceCount}" update="price amount amountParam" />		    				           		              
+					            <f:selectItem itemLabel="Select a sort of coffee" noSelectionOption="true" />
+					            <f:selectItems value="#{coffeeController.coffeeList}" var="coffee" itemLabel="#{coffee.name}" itemValue="#{coffee}"/>				              
+				            </p:selectOneMenu>
+				            <p:messages for="coffee" showDetail="true"/>   
+				                        
+				       		<p:outputLabel for="price" value="Price per kilo: " />	
+				       		<h:outputText  id="price" value="#{orderController.coffeeOrder.coffee.price}" >			      
+				       		</h:outputText>
+				       		<p:messages for="price" showDetail="true"/>
+				       					       				      				     
+        					<p:outputLabel for="delivery" value="Delivery:" />
+						    <p:selectOneRadio id="delivery" value="#{orderController.coffeeOrder.delivery}" tabindex="2">
+						    	<p:ajax event="change" process="@this coffee weight" listener="#{orderController.priceCount}" update="amount amountParam"></p:ajax>				    
+						        <f:selectItem itemLabel="Delivery by courier" itemValue="true" />
+						        <f:selectItem itemLabel="Pickup of goods" itemValue="false" />						      
+						    </p:selectOneRadio>
+						    <p:messages for="delivery" showDetail="true"/>
+						    
+						    
+						    <p:outputLabel for="weight" value="Weight(kilo):" />
+						    <p:inputNumber id="weight" minValue="0" value="#{orderController.coffeeOrder.weight}" decimalSeparator="," thousandSeparator="." decimalPlaces="1" tabindex="3">
+						    	<f:validateDoubleRange minimum="0.1"/>                     		 
+						    	<p:ajax event="keyup" process="@this coffee delivery"  listener="#{orderController.priceCount}" update="amount amountParam"></p:ajax>
+               				</p:inputNumber>  
+               				<p:messages for="weight" showDetail="true"/>            
+               				
+               				<p:outputLabel for="date" value="Delivery date:" />
+       						<p:calendar id="date" value="#{orderController.coffeeOrder.date}" mindate="today" disabledWeekends="true" pattern="dd-MM-yyyy" mask="true" tabindex="4"/>	         
+               				<p:messages for="date" showDetail="true"/>
+            
+               				<p:outputLabel for="deliveryTimeFrom" value="Delivery time from:" />
+       						<p:calendar id="deliveryTimeFrom" value="#{orderController.coffeeOrder.deliveryTimeFrom}" binding="#{timeFrom}"  pattern="HH:mm" minHour="10" maxHour="22" showMinute="false" timeOnly="true" tabindex="5"/>
+       						<p:messages for="deliveryTimeFrom" showDetail="true"/>
+       						
+       						<p:outputLabel for="deliveryTimeTo" value="Delivery time to:" />
+       						<p:calendar id="deliveryTimeTo" value="#{orderController.coffeeOrder.deliveryTimeTo}" pattern="HH:mm" minHour="10" maxHour="22" showMinute="false" timeOnly="true" tabindex="6">
+     							<f:validator validatorId="deliveryTimeValidator"/>
+     							<f:attribute name="deliveryTimeFrom" value="#{timeFrom}"/>
+       						</p:calendar>
+       						<p:messages for="deliveryTimeTo" showDetail="true"/> 						
+       			   							      				
+               				<p:outputLabel for="amount" value="Price: " />
+				           	<h:outputText id="amount" converter="javax.faces.BigDecimal"  value="#{orderController.coffeeOrder.price}">				           		
+				           	</h:outputText>
+				           	
+				           	<h:inputHidden id="amountParam"  value="#{orderController.coffeeOrder.price}"></h:inputHidden>
+						    
+						</h:panelGrid>	     
+						               
+				        <p:separator />
+				 
+				        <p:commandButton value="save"  update="orderform"  action="#{orderController.saveOrder}"  icon="ui-icon-check" tabindex="7">
+				        </p:commandButton>
+				    </p:panel>
+				</h:form> 
+
+			</ui:define>
+		</ui:composition>
+	</h:body>
+</html>

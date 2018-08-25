@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<h:body>
+		<ui:composition template="/template/templLayout.xhtml">
+			<ui:define name="content">
+				
+				<f:metadata>
+						<f:viewParam name="orderId" value="#{orderController.orderId}"></f:viewParam>
+						<f:viewAction action="#{orderController.fetchOrder}"></f:viewAction>
+				</f:metadata>
+				
+				<p:panel style="min-height:200px">						
+					<p:dataTable var="order" value="#{orderController.coffeeOrder}">
+					    <p:column headerText="Id">
+					        <h:outputText value="#{order.id}" />
+					    </p:column>
+					 
+					    <p:column headerText="Coffee">
+					        <h:outputText value="#{order.coffee.name}" />
+					    </p:column>
+					 
+					    <p:column headerText="Delivery">
+					        <h:outputText value="#{order.delivery}" />
+					    </p:column>
+					 
+					    <p:column headerText="Delivery time from">
+					        <h:outputText value="#{order.deliveryTimeFrom}" />
+					    </p:column>
+					    
+					    <p:column headerText="Delivery time to">
+					        <h:outputText value="#{order.deliveryTimeTo}" />
+					    </p:column>
+					    
+					    <p:column headerText="Date">
+					        <h:outputText value="#{order.date}" />
+					    </p:column>
+					    
+					    <p:column headerText="Price">
+					        <h:outputText value="#{order.price}" />
+					    </p:column>
+					    
+					    <p:column headerText="Date of creation">
+					        <h:outputText value="#{order.dateCreated}" converter="javax.faces.DateTime"/>
+					    </p:column>
+					</p:dataTable>				
+				</p:panel>
+				
+				<h:form>
+									
+						<p:commandButton  value="Delete" icon="fa fa-fw fa-remove" styleClass="ui-priority-primary" action="#{orderController.deleteOrder}">			        				    			 
+							<p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />											   
+						</p:commandButton>
+								 
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
+						
+				</h:form>
+			</ui:define>
+		</ui:composition>
+	</h:body>
+</html>
